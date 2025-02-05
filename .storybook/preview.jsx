@@ -1,5 +1,5 @@
 import { Global } from '@emotion/react';
-
+import { fn } from '@storybook/test';
 import { GlobalStyle } from '../src/shared/global';
 
 /** @type { import('@storybook/react').Preview } */
@@ -12,8 +12,9 @@ const preview = {
       </>
     ),
   ],
+
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: { onClick: fn() }, // Explicit action handler
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -21,6 +22,8 @@ const preview = {
       },
     },
   },
+
+  tags: ['autodocs', 'autodocs'], // Removed duplicate tag
 };
 
 export default preview;
