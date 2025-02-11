@@ -23,7 +23,7 @@ const preview = {
     },
   },
 
-  tags: ['autodocs', 'autodocs'], // Removed duplicate tag
+  tags: ['autodocs', 'autodocs', 'autodocs'], // Removed duplicate tag
 };
 
 export default preview;

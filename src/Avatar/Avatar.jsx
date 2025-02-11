@@ -1,156 +1,73 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import { color, typography } from '../shared/styles';
 
-import { glow } from '../shared/animation';
+const Avatar = ({ username, src, size, loading, color, disabled }) => {
+  const sizeMap = {
+    small: '30px',
+    medium: '50px',
+    large: '70px',
+  };
 
-import { Icon } from '../Icon/Icon';
+  const avatarSize = sizeMap[size] || sizeMap.medium; // Default size is medium
 
-export const sizes = {
-  large: 40,
-  medium: 28,
-  small: 20,
-  tiny: 16,
-};
+  const colorMap = {
+    positive: '#28a745', // Green
+    negative: '#dc3545', // Red
+    all: '#ffc107', // Yellow
+    info: '#17a2b8', // Blue
+  };
 
-const Image = styled.div`
-  background: ${(props) => (!props.loading ? 'transparent' : color.light)};
-  border-radius: 50%;
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-  text-transform: uppercase;
+  const avatarColor = colorMap[color] || color || '#007bff'; // Default blue
 
-  height: ${sizes.medium}px;
-  width: ${sizes.medium}px;
-  line-height: ${sizes.medium}px;
+  const styles = {
+    background: loading ? '#f0f0f0' : src ? 'transparent' : avatarColor,
+    color: loading ? '#000' : src ? 'transparent' : '#fff',
+    width: avatarSize,
+    height: avatarSize,
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: loading ? '16px' : '20px',
+    fontWeight: 'bold',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.6 : 1,
+  };
 
-  ${(props) =>
-    props.size === 'tiny' &&
-    css`
-      height: ${sizes.tiny}px;
-      width: ${sizes.tiny}px;
-      line-height: ${sizes.tiny}px;
-    `}
+  const renderContent = () => {
+    if (loading) {
+      return '...'; // Loading text
+    }
 
-  ${(props) =>
-    props.size === 'small' &&
-    css`
-      height: ${sizes.small}px;
-      width: ${sizes.small}px;
-      line-height: ${sizes.small}px;
-    `}
+    if (src) {
+      return <img src={src} alt={username} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />;
+    }
 
-  ${(props) =>
-    props.size === 'large' &&
-    css`
-      height: ${sizes.large}px;
-      width: ${sizes.large}px;
-      line-height: ${sizes.large}px;
-    `}
-
-  ${(props) =>
-    !props.src &&
-    css`
-      background: ${!props.loading && '#37D5D3'};
-    `}
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  svg {
-    position: relative;
-    bottom: -2px;
-    height: 100%;
-    width: 100%;
-    vertical-align: top;
-  }
-
-  path {
-    fill: ${color.medium};
-    animation: ${glow} 1.5s ease-in-out infinite;
-  }
-`;
-// prettier-ignore
-const Initial = styled.div`
-  color: ${color.lightest};
-  text-align: center;
-
-  font-size: ${typography.size.s2}px;
-  line-height: ${sizes.medium}px;
-
-  ${props => props.size === "tiny" && css`
-    font-size: ${typography.size.s1 - 2}px;
-    line-height: ${sizes.tiny}px;
-  `}
-
-  ${props => props.size === "small" && css`
-    font-size: ${typography.size.s1}px;
-    line-height: ${sizes.small}px;
-  `}
-
-  ${props => props.size === "large" && css`
-    font-size: ${typography.size.s3}px;
-    line-height: ${sizes.large}px;
-  `}
-`;
-
-/**
-- Use an avatar for attributing actions or content to specific users.
-- The user's name should always be present when using Avatar – either printed beside the avatar or in a tooltip.
-**/
-export function Avatar({ loading, username, src, size, ...props }) {
-  let avatarFigure = <Icon icon='useralt' />;
-  const a11yProps = {};
-
-  if (loading) {
-    a11yProps['aria-busy'] = true;
-    a11yProps['aria-label'] = 'Loading avatar ...';
-  } else if (src) {
-    avatarFigure = <img src={src} alt={username} />;
-  } else {
-    a11yProps['aria-label'] = username;
-    avatarFigure = (
-      <Initial size={size} aria-hidden='true'>
-        {username.substring(0, 1)}
-      </Initial>
-    );
-  }
+    return username.substring(0, 1); // First letter of the username
+  };
 
   return (
-    <Image size={size} loading={loading} src={src} {...a11yProps} {...props}>
-      {avatarFigure}
-    </Image>
+    <div style={styles} disabled={disabled}>
+      {renderContent()}
+    </div>
   );
-}
+};
 
 Avatar.propTypes = {
-  /**
-    Use the loading state to indicate that the data Avatar needs is still loading.
-    */
-  loading: PropTypes.bool,
-  /**
-    Avatar falls back to the user's initial when no image is provided.
-    Supply a `username` and omit `src` to see what this looks like.
-    */
-  username: PropTypes.string,
-  /**
-    The URL of the Avatar's image.
-    */
+  username: PropTypes.string.isRequired,
   src: PropTypes.string,
-  /**
-    Avatar comes in four sizes. In most cases, you'll be fine with `medium`.
-    */
-  size: PropTypes.oneOf(Object.keys(sizes)),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  loading: PropTypes.bool,
+  color: PropTypes.oneOf(['positive', 'negative', 'all', 'info']),
+  disabled: PropTypes.bool,
 };
 
 Avatar.defaultProps = {
-  loading: false,
-  username: 'loading',
   src: null,
   size: 'medium',
+  loading: false,
+  color: 'info', // Default to "info"
+  disabled: false,
 };
+
+export default Avatar;
