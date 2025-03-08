@@ -1,29 +1,30 @@
-import React from "react";
-import Navbar from "./Navbar";
+// Navbar.stories.jsx
+import React from 'react';
+import Navbar from './Navbar';
+import Navbar2 from './Navbar2';
+import UpdateUser from './UpdateUser';
+import { ThemeProvider } from '../ThemeContext'
 
-// Define the default export with component details for Storybook
 export default {
-  title: "Components/Navbar",
+  title: 'Components/Navbar',
   component: Navbar,
-  argTypes: {
-    background: { control: "color" },
-    buttonColor: { control: "color" },
-  },
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
+    )
+  ],
 };
 
-// Base template for stories
 const Template = (args) => <Navbar {...args} />;
 
-// Default Navbar story
-export const DefaultNavbar = Template.bind({});
-DefaultNavbar.args = {
-  background: "#333", // Default background color
-  buttonColor: "#4CAF50", // Default button color
-};
+export const Default = Template.bind({});
+Default.args = {};
+const Template2 = (args) => <Navbar2 {...args} />;
+export const Default2 = Template2.bind({});
+Default2.args = {};
 
-// Custom Navbar story with different background color
-export const CustomNavbar = Template.bind({});
-CustomNavbar.args = {
-  background: "#1E1E1E", // Custom background color
-  buttonColor: "#FF5733", // Custom button color
-};
+const updateUser = (args) => <UpdateUser {...args} />;
+export const UpdateUserTemplate = updateUser.bind({});
+UpdateUserTemplate.args = {};

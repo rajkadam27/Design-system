@@ -1,6 +1,9 @@
-import { Global } from '@emotion/react';
-import { fn } from '@storybook/test';
-import { GlobalStyle } from '../src/shared/global';
+import { Global } from "@emotion/react";
+import { fn } from "@storybook/test";
+import { GlobalStyle } from "../src/shared/global";
+import { reactRouterParameters } from "storybook-addon-react-router-v6";
+import { MemoryRouter } from "react-router-dom";
+
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -8,7 +11,11 @@ const preview = {
     (Story) => (
       <>
         <Global styles={GlobalStyle} />
-        <Story />
+      <MemoryRouter>
+       
+          <Story />
+        
+      </MemoryRouter>
       </>
     ),
   ],
@@ -23,7 +30,7 @@ const preview = {
     },
   },
 
-  tags: ['autodocs', 'autodocs', 'autodocs'], // Removed duplicate tag
+  tags: ["autodocs", "autodocs", "autodocs"], // Removed duplicate tag
 };
 
 export default preview;
